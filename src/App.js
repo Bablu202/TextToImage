@@ -5,9 +5,11 @@ function App() {
   const [search, setSearch] = useState("");
   const [container, setContainer] = useState();
 
-  /*useEffect(() => {
-    response()
-  }, [search])*/ const url = "https://open-ai21.p.rapidapi.com/texttoimage2";
+  const [imageLoad, setImageLoaded] = useState();
+
+  useEffect(() => {}, []);
+
+  const url = "https://open-ai21.p.rapidapi.com/texttoimage2";
   const options = {
     method: "POST",
     headers: {
@@ -25,9 +27,11 @@ function App() {
       .then((res) => {
         return res.json();
       })
+
       .then((data) => {
-        console.log(data);
         setContainer(data);
+        setImageLoaded(data.url);
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -41,17 +45,32 @@ function App() {
   const submitHandler = (e) => {
     e.preventDefault();
     setSearch(typing);
+    console.log(55 + typing);
     console.log(search);
     response();
+  };
+  const logButton = () => {
+    console.log(container);
   };
 
   return (
     <div className="App">
-      <form onSubmit={submitHandler}>
-        <input type="text" value={typing} onChange={handleTypingValue} />
-        <button type="submit">talk</button>
-      </form>
-      <img style={{ width: "250px" }} src={container?.url} alt="loading" />
+      <input
+        className="Input"
+        type="text"
+        value={typing}
+        onChange={handleTypingValue}
+      />
+      <button className="btn" onClick={submitHandler}>
+        talk
+      </button>
+      <button className="btn" onClick={logButton}>
+        log
+      </button>
+      <br />
+      {imageLoad && (
+        <img style={{ width: "250px" }} src={imageLoad} alt="loading" />
+      )}
     </div>
   );
 }
